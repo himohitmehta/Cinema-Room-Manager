@@ -15,15 +15,44 @@ fun main() {
     loop@ while (true) {
         println("1. Show the seats")
         println("2. Buy a ticket")
+        println("3. Statistics")
         println("0. Exit")
-        when(readLine()!!.toInt()) {
+        when (readLine()!!.toInt()) {
             1 -> printScheme(movieHall)
-            2 -> bookTicket(seats,rows, movieHall)
+            2 -> bookTicket(seats, rows, movieHall)
+            3 -> showStatistics(seats, rows, movieHall)
             0 -> break@loop
         }
     }
 }
-fun bookTicket(seats: Int, rows: Int, movieHall: Array<Array<Char>>) {
+
+//function to show statistics
+fun showStatistics(seats: Int, rows: Int, movieHall: Array<Array<Char>>) {
+    val totalSeats = ticketCounter(seats, rows)
+    val totalIncome = totalSeats * 10
+
+    println("Number of purchased tickets: 0")
+    println("Percentage: $percentage.%")
+    println("Current income: $0")
+    println("Total income: $totalIncome")
+
+
+}
+
+//function to count tickets
+fun ticketCounter(seats: Int, rows: Int): Int {
+    return seats * rows
+}
+
+//function calculate percentage
+fun percentageCalculator(bookedSeats: Int, totalSeats: Int): Double {
+
+    return bookedSeats.toDouble() / totalSeats.toDouble()
+}
+
+//function to book ticket
+fun bookTicket(seats: Int, rows: Int, movieHall: Array<Array<Char>>){
+
     println("\nEnter a row number:")
 
     val row = readLine()!!.toInt()
@@ -35,11 +64,15 @@ fun bookTicket(seats: Int, rows: Int, movieHall: Array<Array<Char>>) {
     movieHall.reserveSeat(row, seat)
 
     printPrice(seats, rows, row)
+
 }
+
+//function to reserve seat
 fun Array<Array<Char>>.reserveSeat(row: Int, seat: Int) {
     this[row - 1][seat - 1] = 'B'
 }
 
+//function to print price of ticket
 fun printPrice(seats: Int, rows: Int, row: Int) {
     val totalSeats = rows * seats
     val price = if (totalSeats <= 60) 10 else if (row <= rows / 2) 10 else 8
@@ -47,6 +80,7 @@ fun printPrice(seats: Int, rows: Int, row: Int) {
     println("\nTicket price: \$$price")
 }
 
+//function to print cinema hall
 fun printScheme(movieHall: Array<Array<Char>>) {
     println("\nCinema:\n${movieHall[0].indices.joinToString(" ", "  ") { (it + 1).toString() }}")
 
