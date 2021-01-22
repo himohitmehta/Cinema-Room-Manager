@@ -30,9 +30,10 @@ fun main() {
 fun showStatistics(seats: Int, rows: Int, movieHall: Array<Array<Char>>) {
     val totalSeats = ticketCounter(seats, rows)
     val totalIncome = totalSeats * 10
-
+    val bookedSeats = 0
+    val percentage = percentageCalculator(bookedSeats, totalSeats)
     println("Number of purchased tickets: 0")
-    println("Percentage: $percentage.%")
+    println("Percentage: $percentage%")
     println("Current income: $0")
     println("Total income: $totalIncome")
 
@@ -49,22 +50,31 @@ fun percentageCalculator(bookedSeats: Int, totalSeats: Int): Double {
 
     return bookedSeats.toDouble() / totalSeats.toDouble()
 }
+//function to check if the seat is reserved or not
+//if it is reserved , then user cannot purchase the ticket
 
 //function to book ticket
-fun bookTicket(seats: Int, rows: Int, movieHall: Array<Array<Char>>){
+fun bookTicket(seats: Int, rows: Int, movieHall: Array<Array<Char>>): Int {
 
-    println("\nEnter a row number:")
+    var bookedSeats = 0
+    var row = 0
+    try {
+        println("\nEnter a row number:")
 
-    val row = readLine()!!.toInt()
+        row = readLine()!!.toInt()
 
-    println("Enter a seat number in that row:")
+        println("Enter a seat number in that row:")
 
-    val seat = readLine()!!.toInt()
+        val seat = readLine()!!.toInt()
 
-    movieHall.reserveSeat(row, seat)
-
+        movieHall.reserveSeat(row, seat)
+        bookedSeats++
+    } catch (e: ArrayIndexOutOfBoundsException) {
+        println("Wrong input!")
+        bookTicket(seats, rows, movieHall)
+    }
     printPrice(seats, rows, row)
-
+    return bookedSeats
 }
 
 //function to reserve seat
